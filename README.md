@@ -12,6 +12,10 @@ _这是一个使用 **Lua 语言** 编写的 Mod 示例.
 - [`main.lua` 的 `M` 结构](#m-struct)
 - [奶茶配方数据说明](#drink-data)
 - [完整南瓜橙橙示例](#drink-example)
+- [三种混合规则说明](#mix-rules)
+- [修改已有饮品颜色完整示例](#drink-color-example)
+- [自定义背景音乐示例](#custom-bgm-example)
+- [每天自动支付账单示例](#auto-pay-bill-example)
 - [本地化（多语言支持）](#localization)（[直接打开 Example_ZH 本地化示例](Example_ZH/LocalizedPumpkinDrink/)）
 - [上传 Steam 创意工坊](#workshop-upload)
 - [联系方式](#contact)
@@ -250,26 +254,38 @@ local function add_new_drink()
     D.UnlockedItemID:Add("Orange")
 
 
-    --两种液体混合模式（这个配方不需要）：
-    -- 3) （其他）加“加液体后变化”的规则：纯净水 + 咖啡= 南瓜汁 （开玩笑的加法） 目前配方不需要
+    -- 3) 单个液体 + 单个液体的变化规则（这个配方不需要）
+    -- 示例：纯净水 + 咖啡 = 南瓜汁（仅演示接口，所以保持注释）
     ------------------------------------------------------------
     -- R:RegisterCupAddWaterRule(
-    --     "Drink.PureWater",    -- CurrentType（杯中原液体）
-    --     "Drink.Coffee", -- AddWaterType（加入的液体）
-    --     "Drink.PumpkinJuice"  -- ToWaterType（结果）
+    --     "Drink.PureWater",       -- CurrentType（杯中原液体）
+    --     "Drink.Coffee",          -- AddWaterType（新加入的液体）
+    --     "Drink.PumpkinJuice"     -- ToWaterType（结果液体）
     -- )
 
     ------------------------------------------------------------
-    -- 4) “加物体后变化”的规则：南瓜汁 + 橙子片 = 南瓜橙橙
+    -- 4) 单个液体 + 单个物品的变化规则：南瓜汁 + 橙子片 = 南瓜橙橙
     ------------------------------------------------------------
     R:RegisterCupAddItemRule(
-        "Drink.PumpkinJuice",      -- CurrentType（杯中原液体）南瓜汁
-        "1103",         -- AddItemType（加入的小料类型）橙子片
-        "Drink.PumpkinOrange" --变成的液体类型- 南瓜橙橙
+        "Drink.PumpkinJuice",      -- CurrentType（杯中原液体）
+        "1103",                    -- AddItemType（新加入的橙子片）
+        "Drink.PumpkinOrange"      -- ToWaterType（结果液体）
     )
 
     ------------------------------------------------------------
-    -- 5) 饮品颜色
+    -- 5) 多个液体 + 多个物品的完美混合规则
+    -- 南瓜汁 + 橙汁 + 橙子片 + 柠檬片 = 南瓜橙橙
+    ------------------------------------------------------------
+    local MixRule = UE.FPerfectMixRule()
+    MixRule.RequiredWaterTypes:Add("Drink.PumpkinJuice") -- 南瓜汁
+    MixRule.RequiredWaterTypes:Add("Drink.OrangeJuice")  -- 橙汁
+    MixRule.RequiredItemIDs:Add(1103)                     -- 橙子片
+    MixRule.RequiredItemIDs:Add(1102)                     -- 柠檬片
+    MixRule.OutputWaterType = "Drink.PumpkinOrange"      -- 命中后的结果液体
+    R:AddOverridePerfectMixRule(MixRule)
+
+    ------------------------------------------------------------
+    -- 6) 饮品颜色
     ------------------------------------------------------------
     local S = UE.FDrinkStyle()
     S.DisplayName = "南瓜橙橙" --需要和配方名称一致
@@ -302,6 +318,261 @@ end
 return M
 ```
 
+<a id="mix-rules"></a>
+### 三种混合规则如何选择
+
+| 需求 | 接口 | 匹配方式 |
+|---|---|---|
+| 单个液体 + 新加入的单个液体 | `RegisterCupAddWaterRule` | 匹配 `CurrentType + AddWaterType`，得到 `ToWaterType`。 |
+| 单个液体 + 新加入的单个物品 | `RegisterCupAddItemRule` | 匹配 `CurrentType + AddItemType`，得到 `ToWaterType`。 |
+| 多个液体 + 多个物品 | `FPerfectMixRule` + `AddOverridePerfectMixRule` | 检查杯中是否包含规则要求的所有液体类型和物品 ID。 |
+
+`FPerfectMixRule` 有三个可填字段：
+
+| 字段 | 类型 | 用途 |
+|---|---|---|
+| `RequiredWaterTypes` | `TArray<FName>` | 必须包含的液体类型列表。 |
+| `RequiredItemIDs` | `TArray<int32>` | 必须包含的物品 ID 列表。 |
+| `OutputWaterType` | `FName` | 全部要求命中后输出的结果液体。 |
+
+> 注意：完美混合规则只检查“是否包含”，不检查液体百分比。重复添加同一个物品 ID 也不会变成数量要求；例如把 `1103` 写两次，仍然只表示“需要包含橙子片”。如果杯中还有额外液体或小料，不会阻止规则命中。
+
+如果同时命中多条规则，系统会优先选择需求类型更多、更具体的规则。`OutputWaterType` 还应有对应的 `FDrinkStyle`，并与配方的 `DrinkWaterFName` 保持一致。
+
+
+---
+
+<a id="drink-color-example"></a>
+## 🎨 完整可运行示例：修改已有饮品颜色（红色柠檬水）
+
+这个示例将已有柠檬水 `Drink.LemonWater` 的两层液体颜色都改为红色，不会替换柠檬水的配方数据。
+
+```text
+RedLemonWater/
+└── main.lua
+```
+
+实现时需要注意：
+
+1. 先用 `GetDrinkStyle` 读取服务器已初始化的完整样式，再只修改 `Color1` 和 `Color2`。这样可以保留原样式中的 `DrinkID`、显示名称和图标。
+2. 所有 Mod 的 `OnInit` 是同步执行的。示例先延迟 1 秒，如果饮品注册表或柠檬水样式还没就绪，就继续重试，避免受 Mod 列表加载顺序影响。
+3. `FLinearColor` 的 RGBA 分量使用 `0.0–1.0`；`UE.FLinearColor(1.0, 0.0, 0.0, 1.0)` 表示不透明红色。
+
+`main.lua` 完整内容：
+
+```lua
+local M = {
+    id          = "RedLemonWater",
+    name        = "红色柠檬水",
+    description = "将柠檬水的两层液体颜色修改为红色",
+    version     = "1.0.0",
+    author      = "yiming",
+}
+
+local DRINK_STYLE_KEY = "Drink.LemonWater"
+local RETRY_DELAY_SECONDS = 1
+local MAX_RETRY_COUNT = 60
+
+local retry_count = 0
+local try_apply_red_color
+
+local function log_screen(message, red, green, blue)
+    if MOD and MOD.Logger then
+        MOD.Logger.LogScreen(message, 5, red, green, blue, 1)
+    end
+end
+
+local function schedule_retry(reason)
+    retry_count = retry_count + 1
+
+    if retry_count == 1 or retry_count % 5 == 0 then
+        log_screen(
+            string.format("[%s] 等待饮品数据初始化：%s（%d/%d）", M.id, reason, retry_count, MAX_RETRY_COUNT),
+            1, 1, 0
+        )
+    end
+
+    if retry_count >= MAX_RETRY_COUNT then
+        log_screen(
+            string.format("[%s] 修改失败：等待 %s 超时", M.id, DRINK_STYLE_KEY),
+            1, 0, 0
+        )
+        return
+    end
+
+    MOD.GAA.TimerManager:AddTimer(RETRY_DELAY_SECONDS, M, function()
+        try_apply_red_color()
+    end)
+end
+
+try_apply_red_color = function()
+    local pc = MOD and MOD.Playercontroller or nil
+    if not pc or not pc.GetWorld then
+        schedule_retry("PlayerController 未就绪")
+        return
+    end
+
+    local world = pc:GetWorld()
+    local registry = world and UE.UBoBaFunction.GetDrinkRegistryWS(world) or nil
+    if not registry then
+        schedule_retry("DrinkRegistryWorldSubsystem 未就绪")
+        return
+    end
+
+    -- 先读取服务器初始化后的完整样式，只覆盖颜色，保留 DrinkID、名称和 Icon。
+    local found, style = registry:GetDrinkStyle(DRINK_STYLE_KEY)
+    if not found or not style then
+        schedule_retry(DRINK_STYLE_KEY .. " 尚未注册")
+        return
+    end
+
+    local red = UE.FLinearColor(1.0, 0.0, 0.0, 1.0)
+    style.Color1 = red
+    style.Color2 = red
+
+    registry:RegisterDrinkStyle(DRINK_STYLE_KEY, style)
+
+    log_screen(
+        string.format("[%s] 已将 %s 的 Color1/Color2 修改为红色", M.id, DRINK_STYLE_KEY),
+        0, 1, 0
+    )
+end
+
+function M.OnInit()
+    log_screen(string.format("Mod [%s] 开始加载", M.name), 0, 1, 1)
+
+    -- 所有 Mod 的 OnInit 同步执行；延迟后写入，避免受 Mod 列表先后顺序影响。
+    MOD.GAA.TimerManager:AddTimer(RETRY_DELAY_SECONDS, M, function()
+        try_apply_red_color()
+    end)
+end
+
+return M
+```
+
+要修改其他已有饮品，替换 `DRINK_STYLE_KEY` 和颜色值即可：
+
+```lua
+local new_color_1 = UE.FLinearColor(1.0, 0.2, 0.2, 1.0)
+local new_color_2 = UE.FLinearColor(0.6, 0.0, 0.0, 1.0)
+style.Color1 = new_color_1
+style.Color2 = new_color_2
+```
+
+如果希望两层液体保持同色，就让 `Color1` 和 `Color2` 使用同一个 `FLinearColor`。
+
+
+---
+
+<a id="custom-bgm-example"></a>
+## 🎵 自定义背景音乐（CustomBGM 示例）
+
+该示例会将 Mod 根目录里的 MP3 组成播放列表，在所有 Mod 加载完成后播放，曲目结束后自动换下一首并循环。
+
+- [打开完整示例](Example_ZH/CustomBGM/)
+- [查看 `main.lua`](Example_ZH/CustomBGM/main.lua)
+- [查看简短备忘](Example_ZH/CustomBGM/使用说明.txt)
+
+```text
+Example_ZH/CustomBGM/
+├── main.lua
+├── 使用说明.txt
+├── 1.mp3       # 自己放入，示例不附带音乐
+└── 2.mp3
+```
+
+### 简单制作方法
+
+1. 将 `Example_ZH/CustomBGM` 复制到 `游戏根目录\BobaCafeSimulator\Mods\CustomBGM\`。
+2. 把自己制作或已获授权的 `.mp3` 直接放在 `CustomBGM` 根目录，不要放进子文件夹。
+3. 需要时修改 `main.lua` 顶部的 `priority`、`SHUFFLE` 和 `VOLUME_MULTIPLIER`。
+4. 在游戏 **Mods** 菜单中启用，重新进入游戏。
+
+| 参数 | 作用 |
+|---|---|
+| `priority` | 多个 BGM Mod 同时启用时，数字越大越优先。 |
+| `SHUFFLE` | `true` 随机播放，`false` 按文件名顺序播放。 |
+| `VOLUME_MULTIPLIER` | Mod 的额外音量倍率，仍受游戏音乐音量设置控制。 |
+
+核心调用：
+
+```lua
+playerController:RegisterBackgroundMusicMod(M.id, M.priority, start_background_music)
+playerController:PlayModBackgroundMusicFromDirectory(MOD.ModDir, SHUFFLE, VOLUME_MULTIPLIER)
+```
+
+### 接口与播放规则
+
+- `RegisterBackgroundMusicMod(modId, priority, callback)` 只负责注册背景音乐提供者。所有 Mod 加载完成后，系统按 `priority` 从高到低调用回调；同优先级时，后加载的 Mod 优先。
+- 回调成功启动音乐后应返回 `true`。返回 `false` 时，系统会继续尝试下一个 BGM Mod。
+- `PlayModBackgroundMusicFromDirectory` 只扫描 Mod 根目录直接包含的 `.mp3`，不会递归扫描子文件夹。
+- 曲目结束后自动播放下一首，整轮播放完成后继续循环。
+- 当前 Mod 没有可播放的 MP3 时，会继续尝试下一个 BGM Mod；所有提供者都失败时，回退到游戏默认 BGM。
+
+> 上传 Steam 创意工坊时，只能包含你自己创作、允许再分发或已获得明确授权的音乐。
+
+---
+
+<a id="auto-pay-bill-example"></a>
+## 💳 每天自动支付账单（AutoPayDailyBill 示例）
+
+该示例使用每日早晨 Mod Hook，在服务器上按“水费 → 电费 → 租金 → 工资”的顺序支付账单。
+
+- [打开完整示例](Example_ZH/AutoPayDailyBill/)
+- [查看 `main.lua`](Example_ZH/AutoPayDailyBill/main.lua)
+
+```text
+Example_ZH/AutoPayDailyBill/
+└── main.lua
+```
+
+### 简单制作方法
+
+1. 将 `Example_ZH/AutoPayDailyBill` 复制到 `游戏根目录\BobaCafeSimulator\Mods\AutoPayDailyBill\`。
+2. 在游戏 **Mods** 菜单中启用，重新进入游戏。
+3. 看到“已注册每日早晨回调”日志后，每次进入新一天的早晨都会自动检查账单。
+4. 如果要改变支付优先级，调整 `main.lua` 中 `BILL_SEQUENCE` 的顺序。
+
+核心调用：
+
+```lua
+playerController:RegisterDailyMorningModHook(M.id, on_daily_morning)
+```
+
+回调函数格式：
+
+```lua
+local function on_daily_morning(playerController, dayNumber)
+    if not playerController or not playerController:HasAuthority() then
+        return
+    end
+
+    -- 每天早晨需要执行的服务器逻辑
+end
+```
+
+### 默认支付顺序
+
+| 顺序 | 账单 | `Bill` 字段 | `BillType` |
+|---:|---|---|---|
+| 1 | 水费 | `WaterRate` | `WaterRate` |
+| 2 | 电费 | `Utility` | `Utility` |
+| 3 | 租金 | `Rent` | `Rent` |
+| 4 | 工资 | `Payroll` | `Payroll` |
+
+余额不足以支付当前项目时，示例会停止本次支付，不会跳过它继续支付后面的项目。如果要改变优先级，只调整 `BILL_SEQUENCE` 中四个项目的顺序。
+
+### 自动支付流程
+
+每成功支付一笔，示例会依次：
+
+1. `AddAllPlayerMoneyToGameState(-amount)` 扣除共享金钱。
+2. `AddPaidBillToDayData(BillType, amount)` 把支付记录写入当天 `DayData`。
+3. 清空对应账单字段，然后通过 `SetServerBill` 同步账单。
+4. `AddPlayerTaskByTagName` 给“任务.支付1笔账单”进度加 `1`。
+5. 全部支付结束后显示一次汇总提示。
+
+> 账单和共享金钱是服务器状态，不要删除 `HasAuthority()`、`PlayerIndex` 和 API 完整性检查，否则多人游戏可能重复扣款或产生不同步。
 
 ---
 
