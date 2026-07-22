@@ -516,7 +516,7 @@ playerController:PlayModBackgroundMusicFromDirectory(MOD.ModDir, SHUFFLE, VOLUME
 <a id="auto-pay-bill-example"></a>
 ## 💳 每天自动支付账单（AutoPayDailyBill 示例）
 
-该示例使用每日早晨 Mod Hook，在服务器上按“水费 → 电费 → 租金 → 工资”的顺序支付账单。
+该示例使用每日早晨 Mod Hook，在服务器上按“水费 → 电费 → 租金 → 工资”的顺序支付账单。**只有服务器安装并启用该 Mod 时有效，普通客户端安装不会执行扣款。**
 
 - [打开完整示例](Example_ZH/AutoPayDailyBill/)
 - [查看 `main.lua`](Example_ZH/AutoPayDailyBill/main.lua)
@@ -566,13 +566,15 @@ end
 
 每成功支付一笔，示例会依次：
 
-1. `AddAllPlayerMoneyToGameState(-amount)` 扣除共享金钱。
+1. `TrySpendAllPlayerMoneyForAutoPayMod(amount)` 通过自动账单专用接口扣除共享金钱；传入的是大于零的支出金额。
 2. `AddPaidBillToDayData(BillType, amount)` 把支付记录写入当天 `DayData`。
 3. 清空对应账单字段，然后通过 `SetServerBill` 同步账单。
 4. `AddPlayerTaskByTagName` 给“任务.支付1笔账单”进度加 `1`。
 5. 全部支付结束后显示一次汇总提示。
 
-> 账单和共享金钱是服务器状态，不要删除 `HasAuthority()`、`PlayerIndex` 和 API 完整性检查，否则多人游戏可能重复扣款或产生不同步。
+> `TrySpendAllPlayerMoneyForAutoPayMod` 是普通的服务端权限函数，不是 Server RPC。它会在 C++ 内再次检查 `HasAuthority()`、金额必须大于 `0`、金额必须是有限数值且服务器余额必须足够；客户端调用不会转发到服务器，也不能通过传入负数增加金钱。
+>
+> 账单和共享金钱是服务器状态，不要删除 `HasAuthority()`、`PlayerIndex` 和 API 完整性检查，否则多人游戏可能重复扣款或产生不同步。Mod 示例不要改用任何通用的加减钱 RPC。
 
 ---
 

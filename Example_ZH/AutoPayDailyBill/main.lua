@@ -1,8 +1,8 @@
 local M = {
     id          = "AutoPayDailyBill",
     name        = "每天自动支付账单",
-    description = "每天早晨按水费、电费、租金、工资的顺序自动支付账单",
-    version     = "1.1.1",
+    description = "只有服务器安装有效 每天早晨按水费、电费、租金、工资的顺序自动支付账单",
+    version     = "1.2.0",
     author      = "yiming",
 }
 
@@ -49,7 +49,7 @@ local function get_game_state(playerController)
 end
 
 local function validate_payment_api(playerController, gameState)
-    return playerController.AddAllPlayerMoneyToGameState
+    return playerController.TrySpendAllPlayerMoneyForAutoPayMod
         and playerController.SetServerBill
         and playerController.AddPlayerTaskByTagName
         and gameState.AddPaidBillToDayData
@@ -112,8 +112,15 @@ local function on_daily_morning(playerController, dayNumber)
                 break
             end
 
-            -- 1. 扣除共享金钱。
-            playerController:AddAllPlayerMoneyToGameState(-amount)
+            -- 1. 通过非 RPC 的服务端专用接口扣除共享金钱；参数只能是正数支出。
+            local moneySpent = playerController:TrySpendAllPlayerMoneyForAutoPayMod(amount)
+            if not moneySpent then
+                log_screen(
+                    string.format("[%s] 自动支付停止：服务器拒绝扣除%s %.2f", M.id, billInfo.Name, amount),
+                    1, 0, 0
+                )
+                break
+            end
             balance = balance - amount
 
             -- 2. DayData 对应字段累加本次支付金额的负数。
@@ -168,6 +175,11 @@ end
 
 function M.OnInit()
     local pc = MOD and MOD.Playercontroller or nil
+    if not pc or not pc:HasAuthority() then
+        log_screen("[AutoPayDailyBill] 只有服务器安装有效，客户端不会注册自动支付", 1, 1, 0)
+        return
+    end
+
     if not pc or not pc.RegisterDailyMorningModHook then
         log_screen("[AutoPayDailyBill] 注册失败：每日早晨 Mod Hook 尚未就绪", 1, 0, 0)
         return
