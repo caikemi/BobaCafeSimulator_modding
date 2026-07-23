@@ -14,6 +14,7 @@ _这是一个使用 **Lua 语言** 编写的 Mod 示例.
 - [完整南瓜橙橙示例](#drink-example)
 - [三种混合规则说明](#mix-rules)
 - [修改已有饮品颜色完整示例](#drink-color-example)
+- [模型 PAK 与装饰品示例](#decoration-asset-example)
 - [自定义背景音乐示例](#custom-bgm-example)
 - [每天自动支付账单示例](#auto-pay-bill-example)
 - [本地化（多语言支持）](#localization)（[直接打开 Example_ZH 本地化示例](Example_ZH/LocalizedPumpkinDrink/)）
@@ -461,6 +462,154 @@ style.Color2 = new_color_2
 
 如果希望两层液体保持同色，就让 `Color1` 和 `Color2` 使用同一个 `FLinearColor`。
 
+
+---
+
+<a id="decoration-asset-example"></a>
+## 🪑 模型 PAK 与装饰品示例
+
+模型、材质和贴图不能直接作为普通文件交给游戏读取，需要先使用与游戏一致的 **UE5.6** 空白项目完成 Cook 和 PAK 打包。
+
+- [查看模型 PAK 完整打包教程](Model_PAK_Packaging_ZH.md)
+- [打开动物装饰资产包完整示例](Example_ZH/AnimalDecorationAssetPack/)
+- [直接查看完整 `main.lua`](Example_ZH/AnimalDecorationAssetPack/main.lua)
+
+### 最简单的制作流程
+
+1. 使用 UE5.6 创建一个英文名称的空白蓝图项目。
+2. 在项目的 `Content` 下创建独立英文目录，例如 `Content/MyDecorationPack/`。
+3. 把模型、材质、材质实例和贴图放在该目录中，并确认 Static Mesh 已经设置材质槽。
+4. 在同一目录创建 `PrimaryAssetLabel` 数据资产，设置 `Chunk ID = 1001`、`Cook Rule = Always Cook`，并开启 `Label Assets in My Directory` 和 `Is Runtime Label`。
+5. 在 Packaging 中开启 Pak、Chunk 和共享 Shader，关闭 IoStore，然后打包 Windows。
+6. 复制 `pakchunk1001-Windows.pak`，并从中提取 SM5、SM6 两个 `ShaderArchive-*.ushaderbytecode`。
+7. 参考完整示例修改 `ASSET_ROOT`、物品 ID、模型名称、文本和每件家具的预览图片。
+
+项目中的位置关系：
+
+```text
+MyDecorationProject/
+├── MyDecorationProject.uproject
+├── Config/
+└── Content/
+    └── MyDecorationPack/
+        ├── PAL_MyDecorationPack.uasset
+        ├── SM_MyDecoration.uasset
+        ├── M_MyDecoration.uasset
+        ├── MI_MyDecoration.uasset
+        └── T_MyDecoration_Color.uasset
+```
+
+`PrimaryAssetLabel` 是 UE 内容浏览器中的数据资产，应与它管理的模型、材质和贴图放在同一目录。它不是放在 `Config`、项目根目录或游戏 `Mods` 目录中的文件。
+
+### Lua 最小注册流程
+
+假设模型位于：
+
+```text
+Content/MyDecorationPack/SM_MyDecoration.uasset
+```
+
+运行时对象路径就是：
+
+```text
+/Game/MyDecorationPack/SM_MyDecoration.SM_MyDecoration
+```
+
+下面代码只展示一件地面装饰品的核心注册流程。正式使用时还需要保留完整示例中的 PAK 挂载、PIE 检查、错误处理、中英文文本和 Shader 说明。
+
+```lua
+local M = {
+    id = "MyDecorationMod",
+    name = "My Decoration Mod",
+    description = "Adds one custom furniture decoration.",
+    version = "1.0.0",
+    author = "YourName",
+}
+
+local ASSET_ROOT = "/Game/MyDecorationPack"
+local ITEM_ID = "Mod_MyDecoration_01"
+local MESH_NAME = "SM_MyDecoration"
+local PREVIEW_IMAGE = "SM_MyDecoration.png"
+
+local function RegisterOneDecoration()
+    local World = MOD.GAA.WorldUtils:GetCurrentWorld()
+    local ItemSubsystem = UE.UModFilesystemLib.GetItemDataSubsystem(World)
+    if not ItemSubsystem then
+        error("Could not get ItemDataSubsystem")
+    end
+
+    local ItemTag, bTagValid = UE.UGB_FunctionLibary.FNameToGameplayTag(
+        "购买.装饰.家具",
+        false,
+        false
+    )
+    if not bTagValid then
+        error("Invalid furniture GameplayTag")
+    end
+
+    local MeshPath = ASSET_ROOT .. "/" .. MESH_NAME .. "." .. MESH_NAME
+    if not MOD.GAA.LoadObject("StaticMesh'" .. MeshPath .. "'") then
+        error("Mesh failed to load: " .. MeshPath)
+    end
+
+    local ItemData = UE.FItemDataRuntime()
+    ItemData.ItemIndex = ITEM_ID
+    ItemData.DisplayName = "My Decoration"
+    ItemData.Description = "A custom furniture decoration."
+    ItemData.ItemTag = ItemTag
+
+    ItemData.Functions:Add("Mesh", MeshPath)
+    ItemData.Functions:Add("Painting", "0")
+    ItemData.Functions:Add("Show", "1")
+    ItemData.Functions:Add("UnlockLevel", "0")
+    ItemData.Functions:Add("Value", "50")
+    ItemData.Functions:Add(
+        "TexturePath",
+        UE.UModFilesystemLib.Join(MOD.ModDir, PREVIEW_IMAGE)
+    )
+    ItemData.Functions:Add(
+        "ClassPath",
+        "/Script/Engine.Blueprint'/Game/2Game/Blueprint/商店饰品/BP_家具2100随意放置.BP_家具2100随意放置'"
+    )
+    ItemData.Functions:Add(
+        "BoxClassPath",
+        "/Script/Engine.Blueprint'/Game/1Game/Blueprint/AI/BP/货物包裹/BP_货物包裹建筑.BP_货物包裹建筑'"
+    )
+    ItemData.Functions:Add("BoxHigh", "50")
+    ItemData.Functions:Add("BoxType", "2")
+
+    ItemSubsystem:RegisterItemData(ITEM_ID, ItemData)
+end
+
+function M.OnInit()
+    -- 必须先挂载 PAK 和 Shader 库，再按对象路径加载模型。
+    UE.UModFilesystemLib.MountPaksInDirectory(MOD.ModDir)
+    RegisterOneDecoration()
+end
+
+return M
+```
+
+完整示例还演示了：
+
+- 四个模型分别注册为四个物品。
+- 每件物品使用独立 PNG 预览图。
+- Mod 元数据默认英文，并提供中文本地化。
+- 游戏内物品名称和说明的英文回退与中文本地化。
+- `Functions` 中每个家具字段的具体含义。
+- Editor/PIE 加载 Cooked Content 的处理方式。
+
+最终 Mod 文件夹至少应包含：
+
+```text
+MyDecorationMod/
+├── main.lua
+├── MyDecorationMod.pak
+├── ShaderArchive-项目名_Chunk1001-PCD3D_SM5-PCD3D_SM5.ushaderbytecode
+├── ShaderArchive-项目名_Chunk1001-PCD3D_SM6-PCD3D_SM6.ushaderbytecode
+├── preview.png
+└── SM_MyDecoration.png
+```
 
 ---
 
