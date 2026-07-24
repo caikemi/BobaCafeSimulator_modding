@@ -1,7 +1,8 @@
+-- 平台限制：当前外部 MP3 背景音乐功能仅支持 Windows，Mac/macOS 不可用。
 local M = {
     id = "CustomBGM",
     name = "自定义背景音乐",
-    description = "随机循环播放当前 Mod 根目录中的 MP3 音乐",
+    description = "仅支持 Windows；随机循环播放当前 Mod 根目录中的 MP3 音乐",
     version = "1.0.0",
     author = "yiming",
     priority = 100,

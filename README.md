@@ -480,9 +480,11 @@ style.Color2 = new_color_2
 2. 在项目的 `Content` 下创建独立英文目录，例如 `Content/MyDecorationPack/`。
 3. 把模型、材质、材质实例和贴图放在该目录中，并确认 Static Mesh 已经设置材质槽。
 4. 在同一目录创建 `PrimaryAssetLabel` 数据资产，设置 `Chunk ID = 1001`、`Cook Rule = Always Cook`，并开启 `Label Assets in My Directory` 和 `Is Runtime Label`。
-5. 在 Packaging 中开启 Pak、Chunk 和共享 Shader，关闭 IoStore，然后打包 Windows。
+5. 在 Mod 制作项目的 Packaging 中开启 Pak、Chunk 和共享 Shader，关闭 IoStore，然后打包 Windows。
 6. 复制 `pakchunk1001-Windows.pak`，并从中提取 SM5、SM6 两个 `ShaderArchive-*.ushaderbytecode`。
 7. 参考完整示例修改 `ASSET_ROOT`、物品 ID、模型名称、文本和每件家具的预览图片。
+
+> **重要兼容性说明：**发布的游戏本体也必须关闭 IoStore。重新打包游戏本体时应使用新的空输出目录，不能把新 `.pak` 覆盖到仍残留 `.utoc/.ucas` 的旧发布目录。否则模型可能正常加载，但材质 Shader 库无法打开，显示为默认灰色或黑色材质。普通 Mod 作者只需要确保自己的 Mod 制作项目关闭 IoStore，并使用支持传统 PAK Mod 的正式游戏版本。
 
 项目中的位置关系：
 
@@ -617,6 +619,8 @@ MyDecorationMod/
 ## 🎵 自定义背景音乐（CustomBGM 示例）
 
 该示例会将 Mod 根目录里的 MP3 组成播放列表，在所有 Mod 加载完成后播放，曲目结束后自动换下一首并循环。
+
+> **平台限制：CustomBGM 当前仅支持 Windows，Mac/macOS 不能使用。**
 
 - [打开完整示例](Example_ZH/CustomBGM/)
 - [查看 `main.lua`](Example_ZH/CustomBGM/main.lua)
@@ -838,6 +842,8 @@ D:\BobaWorkshop\
 2. 进入游戏确认 Mod 能加载，配方、图片和文本都正常。
 3. `contentfolder` 指向的文件夹里必须直接看到 `main.lua`，不能变成 `LocalizedPumpkinDrink\LocalizedPumpkinDrink\main.lua`。
 4. `preview.png` 建议使用 256×256 正方形 PNG，并确认能正常打开。
+5. 如果上传的是模型资产 Mod，确认目录中同时包含 `.pak` 和 SM5、SM6 两个 `.ushaderbytecode`，不要上传 `.utoc/.ucas`。
+6. 如果上传的是 CustomBGM，在 Mod 说明和创意工坊页面中明确标注“仅支持 Windows，Mac/macOS 不可用”。
 
 ### 第 3 步：创建上传配置 VDF
 

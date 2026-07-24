@@ -1,5 +1,7 @@
 # UE5.6 模型资产 Mod PAK 打包教程
 
+[中文](Model_PAK_Packaging_ZH.md) | [English](Model_PAK_Packaging_EN.md)
+
 本文适用于《奶茶店模拟器 - 重生之我在冰堡甜城当店长》的 Windows 模型资产 Mod。
 
 完成后，一个模型资产 Mod 通常包含：
@@ -234,7 +236,14 @@ D3D11 Targeted Shader Formats = SM5
 | `Shared Material Native Libraries` | **关闭** |
 | `Cook everything in the project content directory` | 关闭 |
 
-当前 Mod 加载器挂载的是 `.pak`，不是 `.utoc/.ucas`，所以必须关闭 IoStore。
+当前 Mod 加载器挂载的是 `.pak`，不是 `.utoc/.ucas`，所以 Mod 制作工程必须关闭 IoStore。
+
+这项兼容性要求同时适用于游戏本体：
+
+- Mod 作者需要在用于 Cook 资产的 UE 项目中关闭 IoStore，生成传统 `.pak` 和共享 ShaderArchive。
+- 游戏开发者发布 `BobaCafeSimulator` 本体时也需要关闭 IoStore。主游戏运行时如果仍启用了 IoStore，模型可能能够加载，但纯 PAK Mod 的 `.ushaderbytecode` 无法按传统共享 Shader 库打开，最终会显示默认灰色或黑色材质。
+
+普通 Mod 作者不需要修改已安装游戏的配置；只需要使用支持传统 PAK Mod 的正式游戏版本，并确保自己的 Mod 制作工程关闭了 IoStore。
 
 `Share Material Shader Code` 必须开启。这样材质 Shader 会写入可单独加载的 ShaderArchive，避免在 Editor/PIE 直接加载内联 Cooked Shader 时发生兼容问题。
 
@@ -307,6 +316,25 @@ $PROJECT = "C:\Path\To\MyDecorationProject\MyDecorationProject.uproject"
   -nocompile `
   -nocompileuat
 ```
+
+每次重新打包时应使用新的空输出目录，或者先清理旧的 Stage/Package 输出。不要把关闭 IoStore 后生成的新 `.pak` 直接覆盖到以前启用 IoStore 的发布目录，因为打包过程不一定会删除旧文件。
+
+特别是游戏开发者发布游戏本体时，需要确认最终的：
+
+```text
+BobaCafeSimulator/Content/Paks/
+```
+
+中没有残留：
+
+```text
+*.utoc
+*.ucas
+global.utoc
+global.ucas
+```
+
+只更新 `.pak`、但保留这些旧文件，会让运行时继续进入 IoStore 模式，并导致 Mod 模型可以加载但材质 Shader 库无法打开。推荐始终打包到全新的空目录后再提交 Steam Depot。
 
 成功后，通常可以在这里找到 PAK：
 
@@ -492,6 +520,18 @@ ShaderArchive-MyDecorationProject_Chunk1001-PCD3D_SM6-PCD3D_SM6.ushaderbytecode
 - 材质和贴图是否进入同一个 Chunk PAK。
 - `Share Material Shader Code` 是否开启。
 - 两个 ShaderArchive 是否放在 Mod 根目录。
+- 发布的主游戏本体是否关闭了 IoStore。
+- 主游戏 `BobaCafeSimulator/Content/Paks/` 中是否残留旧的 `.utoc/.ucas`。
+
+正常加载共享 Shader 库时，游戏日志中应出现类似内容：
+
+```text
+Using ...ShaderArchive-...ushaderbytecode
+Logical shader library '...' has been created
+成功打开 Mod Shader 库
+```
+
+如果出现 `打开 Mod Shader 库失败`、`Missing shader resource`、`Tried to access an uncooked shader map ID`，或者启动日志仍在读取 `global.utoc`，应优先检查主游戏是否仍在使用 IoStore 或混用了新旧打包输出。
 
 ### 打包结果只有 `.utoc` 和 `.ucas`
 
