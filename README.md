@@ -9,6 +9,7 @@ _这是一个使用 **Lua 语言** 编写的 Mod 示例.
 
 - [工作原理概述](#overview)
 - [Mod 文件夹结构](#folder-structure)
+- 
 - [`main.lua` 的 `M` 结构](#m-struct)
 - [奶茶配方数据说明](#drink-data)
 - [完整南瓜橙橙示例](#drink-example)
@@ -990,7 +991,6 @@ pause
 | 0 | `Drink.RustyIronWater` | 生锈铁水 | `R=0.5 G=0.205 B=0.153 A=0.7` | `R=0.432 G=0.275 B=0.17 A=1` |
 | 0 | `Drink.HotWater` | 热水 | `R=0.382 G=0.965 B=1 A=1` | `R=0.622 G=0.866 B=0.96 A=1` |
 | 0 | `Drink.PureWater` | 纯净水 | `R=0.311 G=0.848 B=1 A=1` | `R=0.624 G=0.863 B=0.956 A=1` |
-| 0 | `Drink.SashimiGreenTea` | 生鱼片绿茶 | `R=0.553 G=0.564 B=0.128 A=1` | `R=0.408 G=0.46 B=0.11 A=1` |
 | 0 | `Drink.Yogurt` | 酸奶 | `R=0.95 G=0.95 B=0.716 A=1` | `R=1 G=1 B=0.859 A=1` |
 | 5001 | — | 柠檬水 | `R=1 G=0.604 B=0.049 A=1` | `R=1 G=0.604 B=0.049 A=1` |
 | 5002 | `Drink.WatermelonJuice` | 西瓜汁 | `R=0.672 G=0.08 B=0.071 A=1` | `R=0.672 G=0.064 B=0.055 A=1` |
