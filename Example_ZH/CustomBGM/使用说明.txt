@@ -1,11 +1,5 @@
-平台限制：本 CustomBGM 示例仅支持 Windows，Mac/macOS 不能使用。
+【兼容状态】此目录仅保留旧 API v1 Windows MP3 示例。
 
-把一个或多个 .mp3 文件直接放在本目录中。
+当前 Boba Mod API v3 尚未把 BobaModMusicAsset 接入游戏内部音乐播放注册表，也不开放任意 MP3/文件访问。不要添加 apiVersion 3 的 mod.json，也不要把 main.lua 当作新 MOD 模板。
 
-游戏加载 Mod 后会随机播放目录中的歌曲；一轮播放完会重新随机排序并继续循环。
-如果目录中没有 MP3，或者所有 MP3 都无法打开，游戏会回退到 PlayerController 蓝图实现的默认背景音乐。
-
-可在 main.lua 顶部修改：
-- priority：多个 BGM Mod 同时启用时的优先级，数字越大越优先。
-- SHUFFLE：true 为随机播放，false 为按文件名顺序播放。
-- VOLUME_MULTIPLIER：本 Mod 的额外音量倍率，仍会受到游戏音乐音量设置控制。
+旧游戏版本可继续通过无 mod.json 的兼容路径尝试加载；内部接口变化可能影响它。新作者请先阅读本目录 README.md 和仓库迁移文档。

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "com.boba.example.autopay",
+  "name": "每日自动支付账单",
+  "version": "3.0.0",
+  "apiVersion": 3,
+  "entry": "v3.lua",
+  "side": "server",
+  "networkPolicy": "server-required",
+  "permissions": [
+    "economy.read",
+    "economy.pay-bills",
+    "storage.write"
+  ],
+  "dependencies": []
+}

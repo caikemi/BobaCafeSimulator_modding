@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "AnimalDecorationAssetPack",
+  "name": "Animal Decoration Asset Pack",
+  "version": "1.3.0",
+  "apiVersion": 3,
+  "entry": "v3.lua",
+  "side": "both",
+  "networkPolicy": "exact-match",
+  "permissions": [
+    "content.register"
+  ]
+}

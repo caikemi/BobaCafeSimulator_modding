@@ -1,15 +1,34 @@
-# Mod Example Directory
+# Mod example directory
 
-[中文示例](../Example_ZH/README.md) | [English Examples](README.md)
+[中文示例](../Example_ZH/README.md) | [English Examples](README.md) | [Complete English documentation](../README_EN.md)
 
-> [!IMPORTANT]
-> The files in this directory were translated with AI and may contain inaccurate wording. If anything is unclear or conflicts with the game behavior, refer to the matching files under [`Example_ZH`](../Example_ZH/).
+## Official API v3 examples
 
-- [`NewDrinkPumpkinOrange`](NewDrinkPumpkinOrange/): adds a Pumpkin Orange drink recipe.
-- [`NewDrinkPumpkin`](NewDrinkPumpkin/): adds a Pumpkin Juice drink recipe.
-- [`LocalizedPumpkinDrink`](LocalizedPumpkinDrink/): demonstrates localized Mod metadata and drink text.
-- [`CustomBGM`](CustomBGM/): custom MP3 background music for Windows.
-- [`AutoPayDailyBill`](AutoPayDailyBill/): automatically pays server bills every morning.
-- [`AnimalDecorationAssetPack`](AnimalDecorationAssetPack/): model PAK, ShaderArchive, and dynamic furniture registration.
+Every directory below contains `mod.json` and `v3.lua` and uses public, permission-controlled, reversible APIs.
 
-Return to the complete [English README](../README_EN.md).
+| Example | Content |
+| --- | --- |
+| [NewDrinkPumpkin](NewDrinkPumpkin/) | Pumpkin Juice recipe and perfect-liquid ratio |
+| [NewDrinkPumpkinOrange](NewDrinkPumpkinOrange/) | Exact dependency, recipe, cup rule, and style |
+| [RedLemonWater](RedLemonWater/) | Reversible patch of an existing Lemon Water style |
+| [AnimalDecorationAssetPack](AnimalDecorationAssetPack/) | PAK, ShaderArchives, and four BaseInstall furniture items |
+| [AutoPayDailyBill](AutoPayDailyBill/) | Events, economy read/payment, and mod storage |
+
+The current entry is always selected by `mod.json.entry`. Some migrated directories retain `main.lua` for old game builds; new authors should read only `v3.lua`.
+
+## Legacy API v1 compatibility examples
+
+| Example | Status |
+| --- | --- |
+| [CustomBGM](CustomBGM/) | Privileged legacy Windows MP3 example; v3 music playback is not public |
+| [LocalizedPumpkinDrink](LocalizedPumpkinDrink/) | Legacy runtime-localization example; v3 localization is not public |
+
+Those two directories intentionally have no `mod.json` and are not v3 templates. They only document that old player-made mods can continue through the compatibility path.
+
+## Suggested order
+
+1. NewDrinkPumpkin
+2. NewDrinkPumpkinOrange
+3. RedLemonWater
+4. AutoPayDailyBill
+5. AnimalDecorationAssetPack + [PAK guide](../Model_PAK_Packaging_EN.md)
