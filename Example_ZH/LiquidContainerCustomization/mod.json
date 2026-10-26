@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "LiquidContainerCustomization",
+  "name": "液体容器容量与材质示例",
+  "version": "1.0.0",
+  "apiVersion": 3,
+  "entry": "v3.lua",
+  "side": "both",
+  "networkPolicy": "exact-match",
+  "permissions": [
+    "content.register",
+    "content.patch"
+  ]
+}

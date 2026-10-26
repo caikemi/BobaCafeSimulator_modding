@@ -195,6 +195,10 @@ require_success(Context.Content:RegisterFurniture(furniture))
 
 宿主在提交时把定义适配成 BaseInstall 使用的内部物品数据。MOD 不应引用 `FItemDataRuntime` 或 `UGB_ItemDataSubsystem`。完整 Cook/PAK/ShaderArchive 流程见[模型资产 PAK 教程](../../Model_PAK_Packaging_ZH.md)。
 
+## 液体容器容量与材质参数
+
+通过 `MakeLiquidContainerDefinition` / `RegisterLiquidContainer` 修改 `BP_液体容器` 的最大容量，以及 `StaticMesh` 槽 `0` 的向量参数 `Param`。需要 `content.register` 和 `content.patch`，仅在 `OnLoad` 注册，无需资源 PAK。完整示例和字段说明见[液体容器 API](12-liquid-containers.md)。
+
 ## 回滚语义
 
 - 新增：卸载时删除 MOD 创建的条目。
@@ -202,3 +206,7 @@ require_success(Context.Content:RegisterFurniture(furniture))
 - 多层覆盖：移除中间层后，宿主从原值重放剩余层。
 - 加载失败：任何一项失败，整个 MOD 内容不发布。
 - 原游戏：没有 MOD 或没有内容注册时不改变原逻辑。
+
+## 新增独立物品
+
+通过 `MakeItemDefinition` / `RegisterItem` 从模板复制数据并注册新的 ItemId。新增只需 `content.register`，详见[独立物品教程](13-new-items.md)与[商店分类、类路径索引](14-shop-reference.md)。

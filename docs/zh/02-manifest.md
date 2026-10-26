@@ -52,8 +52,8 @@
 
 | 权限 | 允许的调用 |
 | --- | --- |
-| `content.register` | 注册饮品、样式、杯子加物品规则、家具和公开内容资产 |
-| `content.patch` | 设置 `bPatchExisting=true` 覆盖已存在内容；还必须同时申请 `content.register` |
+| `content.register` | 注册饮品、样式、杯子加物品规则、家具、独立物品、液体容器覆盖和公开内容资产 |
+| `content.patch` | 设置 `bPatchExisting=true` 覆盖已存在内容；液体容器覆盖始终需要此权限；还必须同时申请 `content.register` |
 | `economy.read` | `Context.Economy:GetSnapshot()` |
 | `economy.pay-bills` | `Context.Economy:TryPayBill()` |
 | `storage.read` | `GetString`、`GetKeys` |

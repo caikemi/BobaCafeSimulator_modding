@@ -25,7 +25,10 @@ v3 的核心原则：
 9. [Steam 创意工坊发布](docs/zh/09-workshop.md)
 10. [排错与发布前检查](docs/zh/10-troubleshooting.md)
 11. [饮品、液体、原料与图标 ID 参考](docs/zh/11-id-reference.md)
-12. [UE5.6 模型资产 PAK 打包教程](Model_PAK_Packaging_ZH.md)
+12. [液体容器容量与 StaticMesh Param](docs/zh/12-liquid-containers.md)
+13. [新增独立水桶、液体容器及派生蓝图](docs/zh/13-new-items.md)
+14. [全部商店分类与商品类路径](docs/zh/14-shop-reference.md)
+15. [UE5.6 模型资产 PAK 打包教程](Model_PAK_Packaging_ZH.md)
 
 ## 可直接使用的示例
 
@@ -35,11 +38,18 @@ v3 的核心原则：
 | --- | --- |
 | [NewDrinkPumpkin](Example_ZH/NewDrinkPumpkin/) | 注册新饮品和完美液体比例 |
 | [NewDrinkPumpkinOrange](Example_ZH/NewDrinkPumpkinOrange/) | 依赖、饮品、杯子加料规则和颜色 |
+| [LiquidContainerCustomization](Example_ZH/LiquidContainerCustomization/) | 修改容器容量及外壳材质 Param，无需 PAK |
+| [NewWaterBucketItem](Example_ZH/NewWaterBucketItem/) | 独立水桶、初始/最大容量、杯子输出与 Glass Color |
+| [NewLiquidContainerItem](Example_ZH/NewLiquidContainerItem/) | 独立液体容器、容量、Param 和保存恢复 |
+| [AppleJuiceBucket20L](Example_ZH/AppleJuiceBucket20L/) | 完整 20L 苹果汁桶：仅杯、深绿、图标与发布资料 |
+| [AutoStopLiquidContainer100L](Example_ZH/AutoStopLiquidContainer100L/) | 完整 100L 自停容器：材料分类、深绿、存档 |
 | [RedLemonWater](Example_ZH/RedLemonWater/) | 用 `content.patch` 可回滚地修改已有颜色 |
 | [AnimalDecorationAssetPack](Example_ZH/AnimalDecorationAssetPack/) | PAK、ShaderArchive 和四件家具 |
 | [AutoPayDailyBill](Example_ZH/AutoPayDailyBill/) | 事件、经济服务和命名空间存储 |
 
 完整索引见 [Example_ZH](Example_ZH/README.md)。
+
+独立物品要求带模板补缺、运行时商店枚举、直接配送身份和内容存档修复的新版宿主；仅 API v3 标记不足。完整功能基线和已验证范围见[独立物品教程](docs/zh/13-new-items.md)。
 
 ## 最小目录
 
@@ -91,10 +101,12 @@ return M
 
 ## 当前能力与边界
 
-已公开：事件、饮品、饮品样式、杯子加物品规则、家具、账单读取/支付、MOD 存储、背包查询/增删、任务进度、普通玩家提示，以及 Blueprint/DataAsset 入口类型。
+已公开：事件、饮品、饮品样式、杯子加物品规则、家具、独立商店物品、容器初始/最大容量、出液类型与材质颜色、原版液体容器容量/Param 覆盖、账单读取/支付、MOD 存储、背包查询/增删、任务进度、普通玩家提示，以及 Blueprint/DataAsset 入口类型。
 
 当前尚未公开：任意 Widget 创建、任意文件/网络访问、内部 UObject、通用液体加液体/复杂混合规则、运行时本地化服务、音乐播放注册表、完整联机 MOD 清单握手，以及 Dedicated Server 独立 Lua 目录加载器。文档中的“未支持”表示不要依赖旧内部接口绕过。
 
 ## 版本说明
 
 本文档以游戏当前的 BaseInstall API v3 实现和仓库内已验证 MOD 为准。若示例与旧帖子冲突，以本仓库的 v3 文档、`mod.json` 和 `v3.lua` 为准。
+
+子蓝图源模板与创建脚本见 [SDK 模板目录](SDK/README.md)。

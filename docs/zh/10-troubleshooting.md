@@ -76,6 +76,21 @@
 - PAK 在 Lua 前已挂载，不要在 `v3.lua` 手动挂载；多人兼容检查通过后还会在 `ClientTravel` 前预挂载资产 PAK。
 - 查看提交错误；任意一件家具失败会回滚整包事务。
 
+## 独立水桶或液体容器排错
+
+按“暂存 → 提交 → 商店 → 配送 → 实例 → 存档”逐步确认，先看当前运行日志：
+
+| 症状 | 核对与处理 |
+| --- | --- |
+| OnLoad / Staged 成功，仍弹 Mod 错误 | Staged 仅表示暂存。还要看到该 Mod 的 `Activated mod context` / `V2.Commit.End`、`Mod.End success=true`，以及整批 `loaded=2`（仅启用这两个示例时）。修复实际 Commit 错误；不要移除存档保护。 |
+| Commit 报物品或配送类必须为 TakeUpActor | 检查自有类已 Cook 且继承兼容。复用 1022/3045 也失败时，确认游戏包含真实商店行补缺修复，模板旧 runtime 可能缺 BoxClassPath；仅改 Lua 不能代替宿主更新。 |
+| 已 Activated，商品材料里仍搜不到 | 检查分类 `购买.商品.材料`、`bShowInShop=true` 和新 ItemId；确认宿主已把动态 ID 接入旧商店行名枚举。不要改回原版 ID 或换装饰分类绕过入口问题。 |
+| 买出后变回 1022/3045、矿泉水或原容量 | 确认宿主直接配送初始化保留所购 ItemId。更新后重启编辑器/游戏并新购买；旧原版 ID 商品不会自动转换。包装箱保留自身 ID 属正常行为，内容物才使用购买 ID。 |
+| 上限正确，但新桶未装满或读档补满 | 检查 Max/Initial 独立开关、单位 ml、`InitialCapacity<=MaxCapacity`。新物品在服务端 BeginPlay 后初始化一次；读档恢复剩余量，重复注册不补满。 |
+| 图标空白或颜色不对 | `PreviewImageRelativePath` 在 Mod 目录内且图片存在；旧商店通过 Function.TexturePath 读取外置图标。桶颜色用槽0 Glass Color，容器用槽0 Param；图标是原模型图示，游戏内深绿由动态材质设置。 |
+
+20L 苹果汁桶应为独立 ID、`20000/20000ml`、`Drink.AppleJuice`、仅杯；100L 自停容器应为独立 ID、`0/100000ml`。等级继承 33/60 时，等级不足应显示锁定卡片。详细宿主要求、完整包与验证边界见[独立物品教程](13-new-items.md)。
+
 ## 事件没有触发
 
 - `Subscribe` 结果是否成功。

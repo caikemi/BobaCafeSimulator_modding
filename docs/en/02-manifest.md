@@ -52,8 +52,8 @@ The manifest is limited to 256 KiB.
 
 | Permission | Allowed calls |
 | --- | --- |
-| `content.register` | Register drinks, styles, cup-add-item rules, furniture, and public content assets |
-| `content.patch` | Use `bPatchExisting=true` on existing content; `content.register` is also required |
+| `content.register` | Register drinks, styles, cup-add-item rules, furniture, independent items, liquid-container overrides, and public content assets |
+| `content.patch` | Use `bPatchExisting=true` on existing content; liquid-container overrides always require this capability; `content.register` is also required |
 | `economy.read` | `Context.Economy:GetSnapshot()` |
 | `economy.pay-bills` | `Context.Economy:TryPayBill()` |
 | `storage.read` | `GetString`, `GetKeys` |

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "AppleJuiceBucket20L",
+  "name": "苹果汁桶（20L）",
+  "description": "独立20L满装苹果汁桶，只允许向杯子添加，深绿色外壳。Independent full 20L apple juice bucket; cups only; dark green exterior.",
+  "version": "1.0.0",
+  "apiVersion": 3,
+  "entry": "v3.lua",
+  "side": "both",
+  "networkPolicy": "exact-match",
+  "permissions": ["content.register"]
+}

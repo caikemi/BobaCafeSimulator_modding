@@ -1,0 +1,27 @@
+苹果汁桶（20L） / Apple Juice Bucket (20L)
+版本 / Version: 1.0.0
+
+中文
+1. 完整安装 AppleJuiceBucket20L 目录，在游戏 MOD 列表启用。
+2. 使用提供 RegisterItem 的 API v3 游戏版本。
+3. 在“购买.商品.材料”分类购买“苹果汁桶（20L）”。价格与解锁等级沿用当前原版桶装矿泉水。
+4. 新购时内含 20L 苹果汁，只允许向杯子添加；外壳为深绿色。
+5. 保存重进保留剩余液量，不会重新装满。使用包含本物品的存档时保持 MOD 启用。
+6. 联机主机和全部客户端安装相同版本。房间检查比较 Mod ID/顺序，尚不比较版本/内容哈希。
+7. 保持 mod.json、v3.lua、icon.png 和 preview.png 在同一 MOD 根目录。
+8. 附带商品图标和工坊封面；沿用原版蓝图、模型和材质，无需 PAK，没有旧 main.lua 入口。
+
+English
+1. Install the complete AppleJuiceBucket20L folder and enable it in the game's mod list.
+2. Use an API v3 game build exposing RegisterItem.
+3. Buy 苹果汁桶（20L） under Goods / Ingredients. Price and unlock level inherit the current built-in bottled-water bucket.
+4. A new bucket contains 20L of apple juice, pours only into cups, and has a dark green exterior.
+5. Saves retain the remaining liquid without refilling. Keep the mod enabled for saves containing this item.
+6. The host and all clients need the same version. Room checks compare Mod IDs/order, not versions or content hashes.
+7. Keep mod.json, v3.lua, icon.png, and preview.png together in the mod root.
+8. Product icon and Workshop cover are included. Game Blueprints, model, and materials are reused; no PAK or legacy main.lua is needed.
+
+完整说明 / Full documentation: releaseREADME.md
+
+宿主功能基线：需要含 2026-10-26 商店枚举、直接配送身份、初始内容与精确存档修复的游戏构建。更新并重启后应新购买验证，旧原版 ID 商品不会自动转换。
+Host feature baseline: use a game build containing the 2026-10-26 shop-enumeration, direct-delivery identity, initial-content, and precise-save fixes. Restart the updated host and make a new purchase; old built-in-ID products are not converted automatically.

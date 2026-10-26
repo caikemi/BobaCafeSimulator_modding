@@ -1,0 +1,29 @@
+自停式液体容器（100L） / Auto-stop Liquid Container (100L)
+版本 / Version: 1.0.0
+
+中文
+1. 完整安装 AutoStopLiquidContainer100L 目录，在游戏 MOD 列表启用。
+2. 使用提供 RegisterItem 的 API v3 游戏版本。
+3. 在“购买.商品.材料”分类购买“自停式液体容器（100L）”。价格和解锁沿用当前原版大容量自停式液体容器。
+4. 新购时为空，最大容量为 100L；按原版方式加入液体、放置杯子和接液，杯满自动停止。
+5. 外壳为深绿色，设置原有 StaticMesh 第 0 槽的 Param；不替换模型、材质资产或自停蓝图。
+6. 不强制改变装入液体的类型；不启用水桶专用“只允许给杯子添加”覆盖。
+7. 保存重进保留当前数量与类型，不会清空或重填。使用包含本物品的存档时保持 MOD 启用。
+8. 联机主机和全部客户端安装相同版本。房间检查比较 Mod ID/顺序，尚不比较版本/内容哈希。
+9. 保持 mod.json、v3.lua、icon.png 和 preview.png 在同一 MOD 根目录；无需 PAK，没有旧 main.lua 入口。
+
+English
+1. Install the complete AutoStopLiquidContainer100L folder and enable it in the mod list.
+2. Use an API v3 game build exposing RegisterItem.
+3. Buy 自停式液体容器（100L） under Goods / Ingredients. Price and unlock inherit the current built-in large auto-stop container.
+4. New containers arrive empty and hold up to 100L. Fill and dispense with the original interactions; dispensing stops when the cup is full.
+5. The dark green exterior uses Param on StaticMesh material slot 0; mesh, material assets, and the auto-stop Blueprint are preserved.
+6. The mod does not force liquid type or enable the bucket-only cup-addition restriction.
+7. Saves retain current quantity and type without clearing or refilling. Keep the mod enabled for saves containing this item.
+8. The host and all clients need the same version. Room checks compare Mod IDs/order, not versions or content hashes.
+9. Keep mod.json, v3.lua, icon.png, and preview.png in the mod root; no PAK or legacy main.lua is needed.
+
+完整说明 / Full documentation: releaseREADME.md
+
+宿主功能基线：需要含 2026-10-26 商店枚举、直接配送身份、初始内容与精确存档修复的游戏构建。更新并重启后应新购买验证，旧原版 ID 商品不会自动转换。
+Host feature baseline: use a game build containing the 2026-10-26 shop-enumeration, direct-delivery identity, initial-content, and precise-save fixes. Restart the updated host and make a new purchase; old built-in-ID products are not converted automatically.

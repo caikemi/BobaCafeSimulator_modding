@@ -76,6 +76,21 @@ Content registration is the opposite: it belongs only in `OnLoad`.
 - The PAK mounts before Lua; do not manually mount from `v3.lua`. After multiplayer compatibility succeeds, asset PAKs are also pre-mounted before `ClientTravel`.
 - Inspect commit errors. One invalid furniture definition rolls the whole transaction back.
 
+## Independent bucket/container troubleshooting
+
+Follow staging → commit → catalog → delivery → instance → save, using the current run's log:
+
+| Symptom | Check and action |
+| --- | --- |
+| OnLoad / Staged succeeds but a Mod error appears | Staging is not activation. Also check `Activated mod context` / `V2.Commit.End`, `Mod.End success=true`, and batch `loaded=2` when only these two examples are enabled. Fix the commit failure and keep save protection enabled. |
+| Commit rejects item/delivery classes as not TakeUpActor classes | Custom classes must be cooked and compatible. If reused 1022/3045 also fails, ensure the host includes real-shop-row template completion; legacy runtime templates may lack BoxClassPath. Lua changes cannot replace a host update. |
+| Activated but missing from Goods / Ingredients search | Check `购买.商品.材料`, `bShowInShop=true`, and the independent ItemId. The host must merge dynamic IDs into its legacy shop-name enumeration. Do not revert to a built-in ID or move to Decorations to bypass the missing integration. |
+| Purchase becomes 1022/3045, bottled water, or original capacity | Direct-delivery initialization must retain the purchased ItemId. Restart after updating the host and make a new purchase; old built-in-ID products do not convert automatically. A genuine wrapper retaining its own ID is correct; its contents use the purchased ID. |
+| Maximum is correct but a new bucket is not filled, or loading refills it | Check separate Max/Initial switches, ml units, and `InitialCapacity<=MaxCapacity`. New contents initialize once on the server after BeginPlay; restoration retains the remaining amount and registration refresh does not refill it. |
+| Missing icon or unexpected color | `PreviewImageRelativePath` must point to an existing image inside the mod. The legacy shop reads external icons via Function.TexturePath. Bucket slot 0 uses Glass Color; container slot 0 uses Param. Icons illustrate the original mesh; the in-game dark green comes from the dynamic material. |
+
+The apple-juice bucket must retain its independent ID, `20000/20000ml`, `Drink.AppleJuice`, and cups-only setting. The auto-stop container must retain its independent ID and `0/100000ml`. Inherited unlock levels 33/60 should produce locked cards below the required level. See [the item guide](13-new-items.md) for host requirements, complete packages, and validation limits.
+
 ## Event does not fire
 
 - Check the `Subscribe` result.

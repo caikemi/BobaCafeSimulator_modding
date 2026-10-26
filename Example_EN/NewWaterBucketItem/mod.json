@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "NewWaterBucketItem",
+  "name": "独立大容量水桶 / Independent Large Water Bucket",
+  "version": "1.0.0",
+  "apiVersion": 3,
+  "entry": "v3.lua",
+  "side": "both",
+  "networkPolicy": "exact-match",
+  "permissions": ["content.register"]
+}

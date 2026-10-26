@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "AutoStopLiquidContainer100L",
+  "name": "自停式液体容器（100L）",
+  "description": "独立100L自停式液体容器，新购为空，杯满自动停止，深绿色外壳。Independent 100L auto-stop liquid container; initially empty; dark green exterior.",
+  "version": "1.0.0",
+  "apiVersion": 3,
+  "entry": "v3.lua",
+  "side": "both",
+  "networkPolicy": "exact-match",
+  "permissions": ["content.register"]
+}

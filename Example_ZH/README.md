@@ -32,3 +32,16 @@
 3. RedLemonWater
 4. AutoPayDailyBill
 5. AnimalDecorationAssetPack + [PAK 教程](../Model_PAK_Packaging_ZH.md)
+
+- [LiquidContainerCustomization](LiquidContainerCustomization/)：修改最大容量和外壳第一个材质的 `Param` 向量参数，无需 PAK。
+
+- [NewWaterBucketItem](NewWaterBucketItem/) — 独立物品与容器属性示例。
+
+- [NewLiquidContainerItem](NewLiquidContainerItem/) — 独立物品与容器属性示例。
+
+## 完整发布包
+
+- [AppleJuiceBucket20L](AppleJuiceBucket20L/)：20L 满装苹果汁，仅杯、深绿，保留完整图片/发布资料。
+- [AutoStopLiquidContainer100L](AutoStopLiquidContainer100L/)：100L 空容器、模板自停行为、深绿，保留完整图片/发布资料。
+
+安装完整目录，需含商店枚举及配送身份修复的新版宿主，见[功能基线](../docs/zh/13-new-items.md)。

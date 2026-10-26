@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "NewLiquidContainerItem",
+  "name": "独立大容量液体容器 / Independent Large Liquid Container",
+  "version": "1.0.0",
+  "apiVersion": 3,
+  "entry": "v3.lua",
+  "side": "both",
+  "networkPolicy": "exact-match",
+  "permissions": ["content.register"]
+}

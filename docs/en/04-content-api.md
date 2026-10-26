@@ -195,6 +195,10 @@ require_success(Context.Content:RegisterFurniture(furniture))
 
 At commit, the host adapts this definition to BaseInstall's internal item data. Mods must not depend on `FItemDataRuntime` or `UGB_ItemDataSubsystem`. See the [model-asset PAK guide](../../Model_PAK_Packaging_EN.md) for Cook, PAK, and ShaderArchive steps.
 
+## Liquid-container capacity and material parameters
+
+Use `MakeLiquidContainerDefinition` / `RegisterLiquidContainer` to override the maximum capacity of `BP_液体容器` and vector parameter `Param` on `StaticMesh` slot `0`. Both `content.register` and `content.patch` are required. Register only in `OnLoad`; no asset PAK is needed. See [the liquid-container API guide](12-liquid-containers.md) for the complete example and fields.
+
 ## Rollback semantics
 
 - Add: unload deletes the entry created by the mod.
@@ -202,3 +206,7 @@ At commit, the host adapts this definition to BaseInstall's internal item data. 
 - Layered patches: removing a middle layer replays the remaining layers from the base value.
 - Failed load: if any definition fails, none of the mod's content is published.
 - Base game: with no content mod, original behavior is unchanged.
+
+## Register independent items
+
+Use `MakeItemDefinition` / `RegisterItem` to copy a template into a new ItemId. New items need only `content.register`. See [the independent-item guide](13-new-items.md) and [the shop/category reference](14-shop-reference.md).

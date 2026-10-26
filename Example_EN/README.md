@@ -32,3 +32,14 @@ Those two directories intentionally have no `mod.json` and are not v3 templates.
 3. RedLemonWater
 4. AutoPayDailyBill
 5. AnimalDecorationAssetPack + [PAK guide](../Model_PAK_Packaging_EN.md)
+
+- [NewWaterBucketItem](NewWaterBucketItem/) — Independent shop item and container-settings example.
+
+- [NewLiquidContainerItem](NewLiquidContainerItem/) — Independent shop item and container-settings example.
+
+## Complete release packages
+
+- [AppleJuiceBucket20L](AppleJuiceBucket20L/): full 20L apple juice, cups only, dark green, complete images and publishing files.
+- [AutoStopLiquidContainer100L](AutoStopLiquidContainer100L/): empty 100L container, template auto-stop behavior, dark green, complete images and publishing files.
+
+Install each complete folder with a host containing shop-enumeration and purchase-identity fixes; see [the feature baseline](../docs/en/13-new-items.md).

@@ -1,0 +1,89 @@
+{
+  "modId": "AutoStopLiquidContainer100L",
+  "version": "1.0.0",
+  "snapshotDate": "2026-10-26",
+  "runtimeSource": "v3.lua registers a new item by copying the game's current template runtime data. This JSON is a publishing/reference snapshot, not a second runtime definition.",
+  "definition": {
+    "ActorClassPath": "",
+    "BoxClassPath": "",
+    "CategoryTag": "购买.商品.材料",
+    "Container": {
+      "Color": {
+        "A": 1,
+        "B": 0.026,
+        "G": 0.085,
+        "R": 0.012
+      },
+      "CupLiquidType": "Drink.PureWater",
+      "InitialCapacity": 0,
+      "MaxCapacity": 100000,
+      "bOnlyAllowCupAddition": false,
+      "bOverrideColor": true,
+      "bOverrideCupLiquidType": false,
+      "bOverrideInitialCapacity": true,
+      "bOverrideMaxCapacity": true,
+      "bOverrideOnlyAllowCupAddition": false
+    },
+    "ContentId": "auto_stop_liquid_container_100l",
+    "Description": "100L（100000mL）自停式液体容器，新购时为空，接满杯子后自动停止。深绿色外壳，保留原大容量自停式容器的模型、配送、自停行为及购买价格和解锁等级；独立商品，不修改原版容器。",
+    "DisplayName": "自停式液体容器（100L）",
+    "ExtraFunctions": {},
+    "ItemId": "Mod_AutoStopLiquidContainer_100000",
+    "PreviewImageRelativePath": "icon.png",
+    "PurchasePrice": -1,
+    "ShopSortPriority": 0,
+    "TemplateItemId": "3045",
+    "UnlockLevel": -1,
+    "bPatchExisting": false,
+    "bShowInShop": true
+  },
+  "inheritedReleaseData": {
+    "templateItemId": "3045",
+    "purchasePriceAtSnapshot": 100,
+    "unlockLevelAtSnapshot": 60,
+    "actorClassPath": "/Game/2Game/Blueprint/BP_设施3045_大容量自停式液体容器.BP_设施3045_大容量自停式液体容器_C",
+    "deliveryClassPath": "/Game/2Game/Blueprint/BP_设施3045_大容量自停式液体容器.BP_设施3045_大容量自停式液体容器_C",
+    "originalFunctions": {
+      "NoDemoShow": "1"
+    },
+    "sourceTables": [
+      {
+        "Table": "/Game/1Game/Data/DT_商店货物3001-3999设施.DT_商店货物3001-3999设施",
+        "RowName": "3045"
+      },
+      {
+        "Table": "/Game/1Game/Data/AllData/DT_所有商店货物.DT_所有商店货物",
+        "RowName": "3045"
+      }
+    ],
+    "originalShopRow": {
+      "Name": "3045",
+      "货物Id": "3045",
+      "货物名称": "NSLOCTEXT(\"[918D47E0B4E75EFBCE1FF96AA8F52542]\", \"DC6C6F354577C872887136A29CB157A3\", \"大容量自停式液体容器\")",
+      "描述": "NSLOCTEXT(\"[918D47E0B4E75EFBCE1FF96AA8F52542]\", \"304841AE4620F0EC2C81A79973E125BB\", \"可盛放各种饮品或液体原料。杯子放满后会自动停止。更大容量，10000ML。\")",
+      "是否显示到商店": true,
+      "Function": {
+        "NoDemoShow": "1"
+      },
+      "解锁需要的等级": 60,
+      "货物总价格": 100,
+      "内部数量": 1,
+      "货物ActorClass": "/Game/2Game/Blueprint/BP_设施3045_大容量自停式液体容器.BP_设施3045_大容量自停式液体容器_C",
+      "物品Alass": "/Game/2Game/Blueprint/BP_设施3045_大容量自停式液体容器.BP_设施3045_大容量自停式液体容器_C",
+      "模型高度": 20,
+      "货物类型": "(TagName=\"购买.商品.工具\")",
+      "箱子类型": "大包放置物品",
+      "Texture": "/Game/1Game/Texture/Store/T3045自停式液体容器1.T3045自停式液体容器1"
+    }
+  },
+  "images": {
+    "icon": "icon.png",
+    "workshopPreview": "preview.png",
+    "sourceTexture": "/Game/1Game/Texture/Store/T3045自停式液体容器1.T3045自停式液体容器1",
+    "provenance": "Original game shop texture exported using Unreal TextureExporterPNG. The cover lays out the real model image; its original color is illustrative. In-game material color is set by the mod's Container.Color."
+  },
+  "hostRequirements": [
+    "BaseInstall API v3 with Content.RegisterItem and persistent container item settings",
+    "Host includes 2026-10-26 template metadata completion, runtime shop enumeration, direct-delivery identity and once-only initialization/precise-save fixes"
+  ]
+}

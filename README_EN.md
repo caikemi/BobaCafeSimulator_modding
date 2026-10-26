@@ -25,7 +25,10 @@ The v3 contract is built around these rules:
 9. [Publishing to the Steam Workshop](docs/en/09-workshop.md)
 10. [Troubleshooting and release checklist](docs/en/10-troubleshooting.md)
 11. [Drink, liquid, ingredient, and icon ID reference](docs/en/11-id-reference.md)
-12. [UE5.6 model-asset PAK packaging guide](Model_PAK_Packaging_EN.md)
+12. [Liquid-container capacity and Param overrides](docs/en/12-liquid-containers.md)
+13. [Independent bucket/container items and child Blueprints](docs/en/13-new-items.md)
+14. [All shop categories and item class paths](docs/en/14-shop-reference.md)
+15. [UE5.6 model-asset PAK packaging guide](Model_PAK_Packaging_EN.md)
 
 ## Ready-to-use examples
 
@@ -35,11 +38,18 @@ Every official v3 example includes `mod.json`, whose `entry` selects `v3.lua`.
 | --- | --- |
 | [NewDrinkPumpkin](Example_EN/NewDrinkPumpkin/) | A new drink and a perfect-liquid ratio |
 | [NewDrinkPumpkinOrange](Example_EN/NewDrinkPumpkinOrange/) | Dependencies, a drink, a cup-add-item rule, and a style |
+| [NewWaterBucketItem](Example_EN/NewWaterBucketItem/) | Independent bucket, capacities, cup output and Glass Color |
+| [NewLiquidContainerItem](Example_EN/NewLiquidContainerItem/) | Independent container, capacities, Param and save restoration |
+| [LiquidContainerCustomization](Example_EN/LiquidContainerCustomization/) | Existing-container capacity and Param overrides, without a PAK |
+| [AppleJuiceBucket20L](Example_EN/AppleJuiceBucket20L/) | Complete 20L apple-juice bucket: cups only, dark green, icons and publishing files |
+| [AutoStopLiquidContainer100L](Example_EN/AutoStopLiquidContainer100L/) | Complete 100L auto-stop container: ingredients category, dark green and saves |
 | [RedLemonWater](Example_EN/RedLemonWater/) | A reversible existing-style patch with `content.patch` |
 | [AnimalDecorationAssetPack](Example_EN/AnimalDecorationAssetPack/) | A PAK, ShaderArchives, and four furniture definitions |
 | [AutoPayDailyBill](Example_EN/AutoPayDailyBill/) | Events, economy services, and namespaced storage |
 
 See [Example_EN](Example_EN/README.md) for the complete index.
+
+Independent items require a host with template completion, runtime shop enumeration, direct-delivery identity, and content-save fixes; the API v3 label alone is insufficient. See [the independent-item guide](docs/en/13-new-items.md) for the feature baseline and validation scope.
 
 ## Minimal folder
 
@@ -91,10 +101,12 @@ Enable it in the in-game Mods menu and re-enter the game to verify it.
 
 ## Current capabilities and boundaries
 
-Public now: events; drinks; drink styles; cup-add-item rules; furniture; bill read/payment; namespaced mod storage; inventory query/add/remove; task progress; ordinary player notifications; and Blueprint/DataAsset entry types.
+Public now: events; drinks; drink styles; cup-add-item rules; furniture; independent shop items; container initial/maximum capacity, output type, and material color; built-in liquid-container capacity/Param overrides; bill read/payment; namespaced mod storage; inventory query/add/remove; task progress; ordinary player notifications; and Blueprint/DataAsset entry types.
 
 Not public yet: arbitrary Widget creation, arbitrary file/network access, internal UObjects, general liquid-plus-liquid or complex mix rules, a runtime localization service, the music playback registry, the complete multiplayer mod-list handshake, or a standalone Dedicated Server Lua-directory loader. “Not supported” means a new mod must not bypass the API by using old internal interfaces.
 
 ## Version note
 
 These documents follow the current BaseInstall API v3 implementation and the verified mods in the game repository. If an old post conflicts with this repository, follow the v3 documentation, `mod.json`, and `v3.lua` here.
+
+Child Blueprint source templates and the creation script are in the [SDK template kit](SDK/README.md).

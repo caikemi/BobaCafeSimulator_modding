@@ -1,0 +1,86 @@
+{
+  "modId": "AppleJuiceBucket20L",
+  "version": "1.0.0",
+  "snapshotDate": "2026-10-26",
+  "runtimeSource": "v3.lua registers a new item by copying the game's current template runtime data. This JSON is a publishing/reference snapshot, not a second runtime definition.",
+  "definition": {
+    "ActorClassPath": "",
+    "BoxClassPath": "",
+    "CategoryTag": "购买.商品.材料",
+    "Container": {
+      "Color": {
+        "A": 1,
+        "B": 0.026,
+        "G": 0.085,
+        "R": 0.012
+      },
+      "CupLiquidType": "Drink.AppleJuice",
+      "InitialCapacity": 20000,
+      "MaxCapacity": 20000,
+      "bOnlyAllowCupAddition": true,
+      "bOverrideColor": true,
+      "bOverrideCupLiquidType": true,
+      "bOverrideInitialCapacity": true,
+      "bOverrideMaxCapacity": true,
+      "bOverrideOnlyAllowCupAddition": true
+    },
+    "ContentId": "apple_juice_bucket_20l",
+    "Description": "20L（20000mL）苹果汁桶，新购时装满苹果汁，只允许向杯子添加。深绿色外壳，购买价格与解锁等级沿用原版桶装矿泉水；独立商品，不修改原版水桶。",
+    "DisplayName": "苹果汁桶（20L）",
+    "ExtraFunctions": {},
+    "ItemId": "Mod_AppleJuiceBucket_20000",
+    "PreviewImageRelativePath": "icon.png",
+    "PurchasePrice": -1,
+    "ShopSortPriority": 0,
+    "TemplateItemId": "1022",
+    "UnlockLevel": -1,
+    "bPatchExisting": false,
+    "bShowInShop": true
+  },
+  "inheritedReleaseData": {
+    "templateItemId": "1022",
+    "purchasePriceAtSnapshot": 2.5,
+    "unlockLevelAtSnapshot": 33,
+    "actorClassPath": "/Game/2Game/Blueprint/BP_1022水桶.BP_1022水桶_C",
+    "deliveryClassPath": "/Game/2Game/Blueprint/BP_1022水桶.BP_1022水桶_C",
+    "originalFunctions": {},
+    "sourceTables": [
+      {
+        "Table": "/Game/1Game/Data/DT_商店货物1001-1100.DT_商店货物1001-1100",
+        "RowName": "1022"
+      },
+      {
+        "Table": "/Game/1Game/Data/AllData/DT_所有商店货物.DT_所有商店货物",
+        "RowName": "1022"
+      }
+    ],
+    "originalShopRow": {
+      "Name": "1022",
+      "货物Id": "1022",
+      "货物名称": "NSLOCTEXT(\"[37036F92E94C2957B4D5286730559FE9]\", \"9AB5A75140D770AC8EF6C5B05249FF7D\", \"桶装矿泉水\")",
+      "描述": "NSLOCTEXT(\"[37036F92E94C2957B4D5286730559FE9]\", \"FA7BBB46441847BAB4B70285F79AD91D\", \"一桶甘甜的10L一次性矿泉水,可以直接加入杯中，也可以放入液体容器中。\")",
+      "是否显示到商店": true,
+      "Function": {},
+      "解锁需要的等级": 33,
+      "货物总价格": 2.5,
+      "内部数量": 1,
+      "货物ActorClass": "/Game/2Game/Blueprint/BP_1022水桶.BP_1022水桶_C",
+      "物品Alass": "/Game/2Game/Blueprint/BP_1022水桶.BP_1022水桶_C",
+      "模型高度": 20,
+      "货物类型": "(TagName=\"购买.商品.材料\")",
+      "箱子类型": "大包放置物品",
+      "Texture": "/Game/1Game/Texture/Store/T1022水桶.T1022水桶"
+    }
+  },
+  "images": {
+    "icon": "icon.png",
+    "workshopPreview": "preview.png",
+    "sourceTexture": "/Game/1Game/Texture/Store/T1022水桶.T1022水桶",
+    "provenance": "Original game shop texture exported using Unreal TextureExporterPNG. The cover lays out the real model image; its original color is illustrative. In-game material color is set by the mod's Container.Color."
+  },
+  "hostRequirements": [
+    "BaseInstall API v3 with Content.RegisterItem and persistent container item settings",
+    "Cup-only Mod bucket interaction and authority-message checks",
+    "Host includes 2026-10-26 template metadata completion, runtime shop enumeration, direct-delivery identity and once-only initialization/precise-save fixes"
+  ]
+}
