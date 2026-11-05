@@ -6,6 +6,8 @@
 
 Epic 官方参考：[Cooking Content and Creating Chunks](https://dev.epicgames.com/documentation/en-us/unreal-engine/cooking-content-and-creating-chunks-in-unreal-engine?application_version=5.6) 和 [Packaging Your Project](https://dev.epicgames.com/documentation/en-us/unreal-engine/packaging-your-project?application_version=5.6)。
 
+包含本次检查更新的宿主要求入口首条有效语句为 `local game_version = "2.17"`，并与实际游戏版本精确匹配。请先验证资源适配再声明；详见[带 Pak Mod 版本要求](docs/zh/15-pak-game-version.md)。
+
 ## 最终目录
 
 ```text
@@ -173,6 +175,8 @@ New-Item -ItemType Directory -Force -Path $OUTPUT
 ## 9. 注册家具
 
 ```lua
+local game_version = "2.17"
+
 local M = {}
 
 function M.OnLoad(Context)

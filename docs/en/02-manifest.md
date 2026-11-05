@@ -4,6 +4,10 @@
 
 If a mod root contains `mod.json`, the loader treats it as a manifest mod. An invalid manifest, missing entry, or failed load does not fall back to privileged API v1. This prevents a configuration error from giving a restricted mod the legacy environment.
 
+## Entries for mods with PAKs also declare the game version
+
+If a `.pak` exists anywhere in the folder, the actual entry (usually `v3.lua`) starts with `local game_version = "2.17"` as its first effective statement, after asset compatibility has been validated. The mod's `version` / `apiVersion` do not replace it. Missing/mismatching declarations are listed together on the main menu and block game entry without changing enabled states. Pure Lua mods are exempt. [Full rule and build applicability](15-pak-game-version.md).
+
 ## Complete example
 
 ```json

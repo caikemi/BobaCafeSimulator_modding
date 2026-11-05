@@ -4,6 +4,10 @@
 
 An API v3 Lua entry must return a table. Keep state local and avoid creating globals.
 
+## Entries for mods with PAKs also declare the game version
+
+If a `.pak` exists anywhere in the folder, the actual entry (usually `v3.lua`) starts with `local game_version = "2.17"` as its first effective statement, after asset compatibility has been validated. The mod's `version` / `apiVersion` do not replace it. Missing/mismatching declarations are listed together on the main menu and block game entry without changing enabled states. Pure Lua mods are exempt. [Full rule and build applicability](15-pak-game-version.md).
+
 ## Lifecycle
 
 ```lua

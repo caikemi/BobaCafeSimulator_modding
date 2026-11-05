@@ -1,3 +1,5 @@
+local game_version = "2.17"
+
 -- AI translation notice: explanatory text in this English example was translated
 -- with AI and may contain inaccurate wording. Chinese localization values,
 -- GameplayTags, and UE object paths are intentional runtime data and are preserved.

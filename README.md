@@ -12,6 +12,8 @@ v3 的核心原则：
 - 没有订阅者或没有安装 MOD 时，原游戏逻辑保持不变。
 - 无 `mod.json` 的旧 MOD 仍可走 API v1 兼容路径，但不享受 v3 的沙箱、权限和回滚保证。
 
+带 Pak 的 Mod 还必须在真实 Lua 入口首条有效语句声明 `local game_version = "2.17"`；纯 Lua 不受此项限制。主菜单会集中提示不兼容的启用项并保留启用状态。规则的构建适用范围与作者验证要求见[版本声明指南](docs/zh/15-pak-game-version.md)。
+
 ## 从这里开始
 
 1. [五分钟快速开始](docs/zh/01-getting-started.md)
@@ -29,6 +31,7 @@ v3 的核心原则：
 13. [新增独立水桶、液体容器及派生蓝图](docs/zh/13-new-items.md)
 14. [全部商店分类与商品类路径](docs/zh/14-shop-reference.md)
 15. [UE5.6 模型资产 PAK 打包教程](Model_PAK_Packaging_ZH.md)
+16. [带 Pak Mod 的游戏版本声明与加载前检查](docs/zh/15-pak-game-version.md)
 
 ## 可直接使用的示例
 

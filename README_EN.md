@@ -12,6 +12,8 @@ The v3 contract is built around these rules:
 - With no subscribing mod, the original game logic is unchanged.
 - Mods without `mod.json` still use the API v1 compatibility path, but do not receive v3 sandboxing, permissions, or rollback guarantees.
 
+Mods with bundled PAKs must also declare `local game_version = "2.17"` as the first effective statement in the actual Lua entry. Pure Lua mods are exempt. The main menu reports incompatible enabled mods together without changing enabled states. See the [version-declaration guide](docs/en/15-pak-game-version.md) for build applicability and author validation requirements.
+
 ## Start here
 
 1. [Five-minute quick start](docs/en/01-getting-started.md)
@@ -29,6 +31,7 @@ The v3 contract is built around these rules:
 13. [Independent bucket/container items and child Blueprints](docs/en/13-new-items.md)
 14. [All shop categories and item class paths](docs/en/14-shop-reference.md)
 15. [UE5.6 model-asset PAK packaging guide](Model_PAK_Packaging_EN.md)
+16. [Game-version declarations and preflight checks for PAK mods](docs/en/15-pak-game-version.md)
 
 ## Ready-to-use examples
 

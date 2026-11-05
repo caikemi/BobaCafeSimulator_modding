@@ -1,3 +1,5 @@
+local game_version = "2.17"
+
 local M = {
     id = "AnimalDecorationAssetPack",
 }

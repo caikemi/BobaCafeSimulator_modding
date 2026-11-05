@@ -6,6 +6,8 @@ This guide builds a BaseInstall API v3 furniture pack containing Static Meshes, 
 
 Official Epic references: [Cooking Content and Creating Chunks](https://dev.epicgames.com/documentation/en-us/unreal-engine/cooking-content-and-creating-chunks-in-unreal-engine?application_version=5.6) and [Packaging Your Project](https://dev.epicgames.com/documentation/en-us/unreal-engine/packaging-your-project?application_version=5.6).
 
+Hosts containing this loading-check update require `local game_version = "2.17"` as the first effective entry statement, exactly matching the actual game version. Validate the assets before declaring compatibility; see [PAK mod version requirements](docs/en/15-pak-game-version.md).
+
 ## Final folder
 
 ```text
@@ -173,6 +175,8 @@ Copy the SM5 and SM6 files, under their original names, to the mod root. The PAK
 ## 9. Register furniture
 
 ```lua
+local game_version = "2.17"
+
 local M = {}
 
 function M.OnLoad(Context)
